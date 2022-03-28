@@ -34,7 +34,7 @@ public class PhrasesActivity extends AppCompatActivity{
 
         //holds the list of items and determines the layout by the resource given
         WordAdapter adapter =
-                new WordAdapter(this, words);
+                new WordAdapter(this, words, R.color.category_phrases);
 
         //Find the {@link ListView} object in the view hierarchy of the {@link Activity}
         ListView listView = (ListView)findViewById(R.id.list);

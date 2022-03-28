@@ -10,10 +10,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 
 public class WordAdapter extends ArrayAdapter<Word> {
+
+    /**Resource id for the background color for this list of words */
+    private final int mColorResourceId;
+
 
     /***
      * This is the custom constructor.
@@ -22,7 +27,7 @@ public class WordAdapter extends ArrayAdapter<Word> {
      * @param context The current context. used to inflate the layout file
      * @param words A list of Word objects to display in a list
      */
-    public WordAdapter(Context context, ArrayList<Word> words) {
+    public WordAdapter(Context context, ArrayList<Word> words, int colorResourceId ) {
         // Here, we initialize the ArrayAdapter's internal storage for the context and the list.
         // the second argument is used when the ArrayAdapter is populating a single TextView.
         // Because this is a custom adapter for two TextViews and an ImageView, the adapter is not
@@ -30,6 +35,7 @@ public class WordAdapter extends ArrayAdapter<Word> {
         // inflating the view ourselves in the getView method)
 
         super(context, 0, words);
+        mColorResourceId = colorResourceId;
     }
 
     /***
@@ -83,6 +89,12 @@ public class WordAdapter extends ArrayAdapter<Word> {
             imageView.setVisibility(View.GONE);
         }
 
+        //set the theme color for the list item
+        View textContainer = listItemView.findViewById(R.id.text_container);
+        //find the color that the resource id maps to
+        int color = ContextCompat.getColor(getContext(), mColorResourceId);
+        //set the background color of the text container view
+        textContainer.setBackgroundColor(color);
 
         // Return the whole list item layout (containing 2 TextViews and an ImageView)
         // so that it can be shown in the ListView
