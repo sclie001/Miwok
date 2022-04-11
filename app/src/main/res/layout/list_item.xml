@@ -40,7 +40,6 @@
             android:textAppearance="?android:textAppearanceMedium"
             android:gravity="top"
             tools:text="one" />
-
     </LinearLayout>
 </LinearLayout>
 
