@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -12,6 +13,21 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class PhrasesActivity extends AppCompatActivity{
+
+    /** handles play back of audio sound */
+    private MediaPlayer mMediaPlayer;
+
+    /**
+     * This listener gets triggered when the media player has finished playing an audio file
+     */
+    private MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(MediaPlayer mediaPlayer) {
+            // now that the media player has finished playing, release its resources
+            releaseMediaPlayer();
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -60,8 +76,6 @@ public class PhrasesActivity extends AppCompatActivity{
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getApplicationContext(), "audio playing",
-                        Toast.LENGTH_SHORT).show();
 
                 // Get the {@link Word} object at the given position the user clicked on
                 Word currentWord = words.get(i);
@@ -70,12 +84,32 @@ public class PhrasesActivity extends AppCompatActivity{
                 // Media Player handles playback of audio files
                 // Create and setup the {@link MediaPlayer} for the audio resource associated
                 // with the current word
-                MediaPlayer mediaPlayer = MediaPlayer.create(PhrasesActivity.this,
+                mMediaPlayer = MediaPlayer.create(PhrasesActivity.this,
                         audioResourceId);
 
+                Toast.makeText(getApplicationContext(), "audio playing",
+                        Toast.LENGTH_SHORT).show();
                 //start the audio file
-                mediaPlayer.start();
+                mMediaPlayer.start();
+
+                // Setup a listener on the media player, so that we can stop and release the
+                // media player once the sound file has finished playing
+                mMediaPlayer.setOnCompletionListener(mCompletionListener);
             }
         });
+    }
+
+    private void releaseMediaPlayer(){
+        // if the media player is not null, it may be playing a sound file
+        if(mMediaPlayer != null){
+            // Regardless of the current state of the media player, release its
+            // resources because we no longer need it
+            mMediaPlayer.release();
+
+            // Set the media player back to null. For this code, it was easier to set it to
+            // null because we can tell the media player is not configured to play sound
+            // at the moment
+            mMediaPlayer = null;
+        }
     }
 }
