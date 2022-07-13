@@ -20,7 +20,7 @@ public class FamilyActivity extends AppCompatActivity {
     /**
      * This listener gets triggered when the {@link MediaPlayer} has completed playing an audio file
      */
-    private MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
+    private final MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
         @Override
         public void onCompletion(MediaPlayer mediaPlayer) {
             //now that the media player has finished playing, release the media player resources
@@ -76,6 +76,10 @@ public class FamilyActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                //Release the media player if it exists because we are about to play
+                // a different sound file
+                releaseMediaPlayer();
 
                 // Get the {@link Word} object at the given position the user clicked on
                 Word currentWord = words.get(i);
